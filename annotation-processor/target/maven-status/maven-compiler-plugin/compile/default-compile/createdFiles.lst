@@ -1,0 +1,5 @@
+com/example/annotation/FieldBuilderProcessor.class
+com/example/annotation/FieldBuilderProcessor$ClassSpecification.class
+META-INF/services/javax.annotation.processing.Processor
+com/example/annotation/FieldBuilderProperty.class
+com/example/annotation/FieldBuilderProcessor$FieldSpecification.class
