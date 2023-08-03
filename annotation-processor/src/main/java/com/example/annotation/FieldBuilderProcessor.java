@@ -3,7 +3,6 @@ package com.example.annotation;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,6 +88,7 @@ public class FieldBuilderProcessor extends AbstractProcessor {
 
             try {
                 writeBuilderFile(className, setterMap);
+                writeRandomBuilderFile(className, setterMap);
             } catch (Exception e) {
                 log.error("error", e);
             }
@@ -98,7 +98,49 @@ public class FieldBuilderProcessor extends AbstractProcessor {
         return true;
     }
 
-    private void writeBuilderFile(String className, Map<String, String> setterMap)
+    private void writeRandomBuilderFile(String className, Map<String, String> setterMap)
+        throws Exception {
+
+        log.info("creating a new Builder class for {} with setters {}", className, setterMap);
+
+        String packageName = null;
+        int lastDot = className.lastIndexOf('.');
+        if (lastDot > 0) {
+            packageName = className.substring(0, lastDot);
+        }
+
+        String simpleClassName = className.substring(lastDot + 1);
+        String builderClassName = className + "BuilderRandom";
+        String builderSimpleClassName = builderClassName.substring(lastDot + 1);
+
+        JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(builderClassName);
+        List<FieldSpecification> fields = setterMap.entrySet()
+            .stream()
+            .map(e -> new FieldSpecification(e.getKey(), e.getValue()))
+            .toList();
+        ClassSpecification classSpecification =
+            new ClassSpecification(packageName, simpleClassName, builderSimpleClassName, fields);
+
+        try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
+            extractedForRandomizer(classSpecification, out);
+        }
+    }
+
+    private void extractedForRandomizer(ClassSpecification classSpecification, PrintWriter out)
+        throws Exception {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_31);
+        configuration.setClassLoaderForTemplateLoading(getClass().getClassLoader(), "");
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        configuration.setLogTemplateExceptions(false);
+        configuration.setWrapUncheckedExceptions(true);
+
+        Map<String, Object> freemarkerDataModel = new HashMap<>();
+        freemarkerDataModel.put("classSpecification", classSpecification);
+
+        Template template = configuration.getTemplate("RandomizerFromFields.ftl");
+        template.process(freemarkerDataModel, out);
+    }    private void writeBuilderFile(String className, Map<String, String> setterMap)
         throws Exception {
 
         log.info("creating a new Builder class for {} with setters {}", className, setterMap);
@@ -138,7 +180,7 @@ public class FieldBuilderProcessor extends AbstractProcessor {
         Map<String, Object> freemarkerDataModel = new HashMap<>();
         freemarkerDataModel.put("classSpecification", classSpecification);
 
-        Template template = configuration.getTemplate("ClassesBuilderFromFields.ftl");
+        Template template = configuration.getTemplate("BuilderFromFields.ftl");
         template.process(freemarkerDataModel, out);
     }
 

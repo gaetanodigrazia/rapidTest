@@ -12,7 +12,7 @@ public class Animal {
         return first;
     }
 
-    @FieldBuilderProperty
+    @FieldBuilderProperty(builder = true, randomize = true)
     public void setFirst(int first) {
         this.first = first;
     }
@@ -21,7 +21,7 @@ public class Animal {
         return second;
     }
 
-    @FieldBuilderProperty
+    @FieldBuilderProperty(builder = true, randomize = true)
     public void setSecond(String second) {
         this.second = second;
     }
