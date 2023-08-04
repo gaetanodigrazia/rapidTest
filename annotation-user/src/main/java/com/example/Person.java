@@ -13,7 +13,7 @@ public class Person {
         return age;
     }
 
-    @FieldBuilderProperty
+    @FieldBuilderProperty(builder = true, randomize = true)
     public void setAge(int age) {
         this.age = age;
     }
@@ -22,7 +22,7 @@ public class Person {
         return name;
     }
 
-    @FieldBuilderProperty
+    @FieldBuilderProperty(builder = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -30,7 +30,7 @@ public class Person {
     public Animal getAnimal() {
         return animal;
     }
-    @FieldBuilderProperty
+    @FieldBuilderProperty(builder = false, randomize = true)
     public void setAnimal(Animal animal) {
         this.animal = animal;
     }

@@ -1,6 +1,7 @@
 package com.example.annotation;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +63,20 @@ public class FieldBuilderProcessor extends AbstractProcessor {
             log.info("...: {}", annotatedElements);
 
             List<Element> setters = annotatedMethods.get(true);
+            List<Element> builderTrue = new ArrayList<>();
+            List<Element> builderTrueRandomizeTrue = new ArrayList<>();
+
+            for(Element setter: setters){
+                if(setter.getAnnotation(FieldBuilderProperty.class).builder()){
+                    builderTrue.add(setter);
+                }
+            }
+            for(Element setter: builderTrue){
+                if(setter.getAnnotation(FieldBuilderProperty.class).randomize()){
+                    builderTrueRandomizeTrue.add(setter);
+                }
+            }
+
             List<Element> otherMethods = annotatedMethods.get(false);
 
             log.info("notifying non-setter methods");
@@ -79,16 +94,27 @@ public class FieldBuilderProcessor extends AbstractProcessor {
             String className = entry.getKey().toString();
             log.info("...: {}", className);
 
-            log.info("calculating setters map");
+/*            log.info("calculating setters map");
             Map<String, String> setterMap = setters.stream().collect(
                 Collectors.toMap(setter -> setter.getSimpleName().toString(),
                     setter -> ((ExecutableType) setter.asType()).getParameterTypes().get(0)
                         .toString()));
-            log.info("...: {}", setterMap);
-
+            log.info("...: {}", setterMap);*/
+                log.info("calculating setters map for builder");
+                Map<String, String> builderSetterMap = builderTrue.stream().collect(
+                        Collectors.toMap(setter -> setter.getSimpleName().toString(),
+                                setter -> ((ExecutableType) setter.asType()).getParameterTypes().get(0)
+                                        .toString()));
+                log.info("...: {}", builderSetterMap);
+                log.info("calculating setters map for builderAndRandomize");
+                Map<String, String> builderAndRandomize = builderTrue.stream().collect(
+                        Collectors.toMap(setter -> setter.getSimpleName().toString(),
+                                setter -> ((ExecutableType) setter.asType()).getParameterTypes().get(0)
+                                        .toString()));
+                log.info("...: {}", builderAndRandomize);
             try {
-                writeBuilderFile(className, setterMap);
-                writeRandomBuilderFile(className, setterMap);
+                writeBuilderFile(className, builderSetterMap);
+                writeRandomBuilderFile(className, builderAndRandomize);
             } catch (Exception e) {
                 log.error("error", e);
             }

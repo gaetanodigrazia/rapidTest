@@ -16,10 +16,6 @@ private Faker faker = new Faker();
         object.setName(value);
         return this;
     }
-    public PersonBuilder setAnimal(com.example.Animal value) {
-        object.setAnimal(value);
-        return this;
-    }
     public PersonBuilder setAge(int value) {
         object.setAge(value);
         return this;
@@ -28,21 +24,18 @@ private Faker faker = new Faker();
     public PersonBuilder fromObject(Person object) {
         PersonBuilder builder = new PersonBuilder();
         builder.setName(object.getName());
-        builder.setAnimal(object.getAnimal());
         builder.setAge(object.getAge());
     return builder;
     }
 
     public PersonBuilder buildNullModel() {
         object.setName(null);
-        object.setAnimal(null);
         object.setAge(0);
     return this;
     }
 
     public PersonBuilder randomize() {
         object.setName(faker.lorem().characters(faker.random().nextInt(5, 15)));
-        object.setAnimal(new AnimalBuilder().randomize().build());
         object.setAge(faker.random().nextInt(5, 15));
     return this;
     }

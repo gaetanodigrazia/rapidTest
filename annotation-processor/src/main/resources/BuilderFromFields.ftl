@@ -29,53 +29,6 @@ private Faker faker = new Faker();
     return builder;
     }
 
-    public ${classSpecification.builderSimpleClassName()} buildNullModel() {
-    <#list classSpecification.fields() as field>
-    <#assign randomValue = ''>
-    <#if field.type() == 'java.lang.String'>
-    <#assign randomValue = "null">
-    <#elseif field.type() == 'int'>
-    <#assign randomValue = "0">
-    <#elseif field.type() == 'boolean'>
-    <#assign randomValue = "false">
-    <#elseif field.type() == 'float'>
-    <#assign randomValue = "0.0f">
-    <#elseif field.type() == 'double'>
-    <#assign randomValue = "0.0d">
-    <#else>
-    <#-- For other types, assume it's a complex object (class) -->
-    <#assign fieldName = field.name()>
-    <#assign randomValue = "null">
-    </#if>
-        object.${field.name()}(${randomValue});
-    </#list>
-    return this;
-    }
-
-    public ${classSpecification.builderSimpleClassName()} randomize() {
-    <#list classSpecification.fields() as field>
-    <#assign randomValue = ''>
-    <#if field.type() == 'java.lang.String'>
-    <#assign randomValue = "faker.lorem().characters(faker.random().nextInt(5, 15))">
-    <#elseif field.type() == 'int'>
-    <#assign randomValue = "faker.random().nextInt(5, 15)">
-    <#elseif field.type() == 'boolean'>
-    <#assign randomValue = "faker.bool().bool()">
-    <#elseif field.type() == 'float'>
-    <#assign randomValue = "faker.number().randomDouble(2, 0, 100).floatValue()">
-    <#elseif field.type() == 'double'>
-    <#assign randomValue = "faker.number().randomDouble(2, 0, 100)">
-    <#else>
-    <#-- For other types, assume it's a complex object (class) -->
-    <#assign fieldName = field.name()>
-    <#assign customObject = fieldName?replace("^set", "","r")?cap_first>
-    <#assign randomValue = "new ${customObject}Builder().randomize().build()">
-    </#if>
-        object.${field.name()}(${randomValue});
-    </#list>
-    return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
