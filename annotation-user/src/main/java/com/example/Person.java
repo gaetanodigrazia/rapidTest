@@ -3,11 +3,10 @@ package com.example;
 import com.example.annotation.FieldBuilderProperty;
 
 public class Person {
-
-
     private int age;
     private String name;
     private Animal animal;
+    private String builderFalseRandomizeTrue;
 
     public int getAge() {
         return age;
@@ -30,9 +29,17 @@ public class Person {
     public Animal getAnimal() {
         return animal;
     }
-    @FieldBuilderProperty(builder = false, randomize = true)
+    @FieldBuilderProperty(builder = true, randomize = true)
     public void setAnimal(Animal animal) {
         this.animal = animal;
+    }
+
+    public String getBuilderFalseRandomizeTrue() {
+        return builderFalseRandomizeTrue;
+    }
+    @FieldBuilderProperty(randomize = true)
+    public void setBuilderFalseRandomizeTrue(String builderFalseRandomizeTrue) {
+        this.builderFalseRandomizeTrue = builderFalseRandomizeTrue;
     }
 
     @Override
@@ -41,6 +48,7 @@ public class Person {
                 "age=" + age +
                 ", name='" + name + '\'' +
                 ", animal=" + animal +
+                ", builderFalseRandomizeTrue='" + builderFalseRandomizeTrue + '\'' +
                 '}';
     }
 }

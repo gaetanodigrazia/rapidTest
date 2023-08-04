@@ -48,7 +48,7 @@ private Faker faker = new Faker();
     <#-- For other types, assume it's a complex object (class) -->
     <#assign fieldName = field.name()>
     <#assign customObject = fieldName?replace("^set", "","r")?cap_first>
-    <#assign randomValue = "new ${customObject}Builder().randomize().build()">
+    <#assign randomValue = "new ${customObject}BuilderRandom().randomize().build()">
     </#if>
         object.${field.name()}(${randomValue});
     </#list>

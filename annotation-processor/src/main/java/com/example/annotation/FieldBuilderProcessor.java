@@ -71,9 +71,9 @@ public class FieldBuilderProcessor extends AbstractProcessor {
                     builderTrue.add(setter);
                 }
             }
-            for(Element setter: builderTrue){
-                if(setter.getAnnotation(FieldBuilderProperty.class).randomize()){
-                    builderTrueRandomizeTrue.add(setter);
+            for(Element whereBuilderIsTrue: builderTrue){
+                if(whereBuilderIsTrue.getAnnotation(FieldBuilderProperty.class).randomize()){
+                    builderTrueRandomizeTrue.add(whereBuilderIsTrue);
                 }
             }
 
@@ -107,7 +107,7 @@ public class FieldBuilderProcessor extends AbstractProcessor {
                                         .toString()));
                 log.info("...: {}", builderSetterMap);
                 log.info("calculating setters map for builderAndRandomize");
-                Map<String, String> builderAndRandomize = builderTrue.stream().collect(
+                Map<String, String> builderAndRandomize = builderTrueRandomizeTrue.stream().collect(
                         Collectors.toMap(setter -> setter.getSimpleName().toString(),
                                 setter -> ((ExecutableType) setter.asType()).getParameterTypes().get(0)
                                         .toString()));

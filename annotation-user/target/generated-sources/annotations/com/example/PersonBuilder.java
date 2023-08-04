@@ -20,24 +20,17 @@ private Faker faker = new Faker();
         object.setAge(value);
         return this;
     }
+    public PersonBuilder setAnimal(com.example.Animal value) {
+        object.setAnimal(value);
+        return this;
+    }
 
     public PersonBuilder fromObject(Person object) {
         PersonBuilder builder = new PersonBuilder();
         builder.setName(object.getName());
         builder.setAge(object.getAge());
+        builder.setAnimal(object.getAnimal());
     return builder;
-    }
-
-    public PersonBuilder buildNullModel() {
-        object.setName(null);
-        object.setAge(0);
-    return this;
-    }
-
-    public PersonBuilder randomize() {
-        object.setName(faker.lorem().characters(faker.random().nextInt(5, 15)));
-        object.setAge(faker.random().nextInt(5, 15));
-    return this;
     }
 
     @Override

@@ -28,18 +28,6 @@ private Faker faker = new Faker();
     return builder;
     }
 
-    public AnimalBuilder buildNullModel() {
-        object.setSecond(null);
-        object.setFirst(0);
-    return this;
-    }
-
-    public AnimalBuilder randomize() {
-        object.setSecond(faker.lorem().characters(faker.random().nextInt(5, 15)));
-        object.setFirst(faker.random().nextInt(5, 15));
-    return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
